@@ -74,7 +74,7 @@ function App() {
       <MapContainer
         id="map"
         center={position}
-        zoom={13}
+        zoom={15}
         scrollWheelZoom={false}
       >
         <ChangeView center={position} />
@@ -84,9 +84,7 @@ function App() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <Marker id="marker" position={position}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
+          <Popup>Gradually understanding this Leaflet map thing.</Popup>
         </Marker>
       </MapContainer>
     </div>

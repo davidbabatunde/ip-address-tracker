@@ -75,3 +75,19 @@ title {
 marker {
   height: 15%;
 }
+
+@media (min-width: 700px) {
+  #details {
+    flex-direction: row;
+    top: 21vh;
+  }
+  #search {
+    width: 550px;
+  }
+  .single {
+    flex-basis: 25%;
+  }
+  #top {
+    height: 26vh;
+  }
+}
