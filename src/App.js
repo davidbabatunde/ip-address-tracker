@@ -6,50 +6,52 @@ import ChangeView from "./Changeview";
 import axios from "axios";
 
 function App() {
-  const [position, setPosition] = useState([51.505, -0.09]);
-  const ip = useRef(position);
-  const [num, setNum] = useState("0.0.0.0");
-  const [ipAddress, setIpAddress] = useState("0.0.0.0");
+  const [position, setPostion] = useState([12, 0.2]);
+  const ip = useRef("");
+  const [num, setNum] = useState("102.89.47.24");
+  const [ipAddress, setIpAddress] = useState("102.89.47.24");
   const [location, setLocation] = useState(", ZZ");
   const [timezone, setTimezone] = useState("GMT");
   const [isp, setIsp] = useState("");
 
   const handleClick = () => {
-    setPosition(ip.current.value.split(","));
+    setNum(ip.current.value);
   };
 
   useEffect(() => {
     axios("https://api.ipify.org/").then((response) => {
       setNum(response.data);
     });
-  });
+  }, []);
 
   useEffect(() => {
-    getData();
-  });
+    async function getData() {
+      await axios(
+        `https://api.ipgeolocation.io/ipgeo?apiKey=91fa12e914df4bf9924a98d4c6c41014&ip=${num}`
+      ).then((response) => {
+        setIpAddress(num);
+        setLocation(`${response.data.city}, ${response.data.country_name}`);
+        setTimezone(`GMT+${response.data.time_zone.offset}`);
+        setIsp(`${response.data.organization}`);
+        setPostion([response.data.latitude, response.data.longitude]);
+      });
+    }
 
-  async function getData() {
-    await axios(
-      `https://geo.ipify.org/api/v2/country,city?apiKey=at_2musotM1QpwgZRVcySUh6qZPv7Or2&ipAddress=${num}`
-    ).then((response) => {
-      setIpAddress(`${response.data.ip}`);
-      setLocation(
-        `${response.data.location.city}, ${response.data.location.country}`
-      );
-      setTimezone(`GMT${response.data.location.timezone}`);
-      setIsp(`${response.data.isp}`);
-    });
-  }
+    getData();
+  }, [num]);
 
   return (
     <div id="total">
-      <h1>IP Address Tracker</h1>
-      <div id="search">
-        <input ref={ip} placeholder={position}></input>
-        <button onClick={handleClick}>
-          <img src={arrow} alt="send" />
-        </button>
+      <div id="top">
+        <h1>IP Address Tracker</h1>
+        <div id="search">
+          <input ref={ip} placeholder={num}></input>
+          <button onClick={handleClick}>
+            <img src={arrow} alt="send" />
+          </button>
+        </div>
       </div>
+
       <div id="details">
         <div className="single">
           <p>IP ADDRESS</p>
